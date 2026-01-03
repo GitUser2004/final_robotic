@@ -20,19 +20,17 @@ WebServer.h
 # all of this libraries are neccesary only for programming the espcam, otherwise there are additional instrucctions inside the code of 
 ```
 
-### TurtleBot3 Setup
+### Python
 
 ```bash
-# Install TurtleBot3 packages if not already installed
-sudo apt install ros-humble-turtlebot3*
+# Install this libraries in python for the espcam
+pip install opencv-python==4.11.0.86
+pip install numpy==2.3.1
 
-# Set TurtleBot3 model
-echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
-source ~/.bashrc
-
-# Set Gazebo model path
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/humble/share/turtlebot3_gazebo/models
+# This dependencies are for the "artificial vision" in the recognition of the colors
 ```
+
+In the "esp-cam" folder there are two archives, the .ino is for programming the espcam, this only needs to be with power, the .py in the folder is on ly for visualize the camera in live, otherwise is not neccesary, the camera will works anyway.
 
 ### Create Workspace
 
