@@ -17,7 +17,19 @@ esp_camera.h
 WiFi.h
 WebServer.h
 
-# all of this libraries are neccesary only for programming the espcam, otherwise there are additional instrucctions inside the code of 
+# all of this libraries are neccesary only for programming the espcam, otherwise there are additional instrucctions inside the code
+
+WiFi.h
+Wire.h
+VL53L0X.h
+ESP32Servo.h
+WebServer.h
+PubSubClient.h
+ArduinoJson.h
+# micro-ROS
+micro_ros_arduino.h
+
+# this libraries are for programming the principal esp32, it needs to be updated
 ```
 
 ### Python
@@ -30,114 +42,60 @@ pip install numpy==2.3.1
 # This dependencies are for the "artificial vision" in the recognition of the colors
 ```
 
+### ROS2 HUMBLE
+
+```bash
+
+sudo apt install ros-humble-desktop
+sudo apt install ros-humble-ros-base
+sudo apt install ros-dev-tools
+# Check ROS2 Humble installation
+ros2 --version
+```
+
 In the "esp-cam" folder there are two archives, the .ino is for programming the espcam, this only needs to be with power, the .py in the folder is on ly for visualize the camera in live, otherwise is not neccesary, the camera will works anyway.
 
 ### Create Workspace
 
 ```bash
 # Create and build workspace
-mkdir -p ~/dqn_navigation_ws/
-cd ~/dqn_navigation_ws/
+mkdir -p ~/autonomous_ws/
+cd ~/autonomous_ws/
 ```
 
 the following steps are neccesary for the first exercise
-- copy all the files of the folder p1 in the workspace **dqn_navigation_ws**
+- copy all the files in the path **ros2/src/dqn_robot_nav/dqn_robot_nav/environment.py** is necessary to copy the folder **src** in the workspace **autonomous_ws**
 - make a colcon build
 ```bash
 colcon build
 source install/setup.bash
 ```
-- in the path **src/dqn_robot_nav/dqn_robot_nav/environment.py** in the line 34 copy the path from the model **src/dqn_robot_nav/models/goal_red/model.sdf** of your devide and replace in the code of the enviroment
 
-once al this steps will be complet it will be ready for training or testing
+once al this steps will be complet it will be ready for running
 
-For training:
-- in the **training_node.py** are all the parameters to training a model, the important values are; n_episodes, max_steps_per_episode, in the agent are anoter parameters for a more advanced configuration of the simulation.
-  and in the **environment.py** in the line 43 are the actions, that set the action in linear or angular velocity, it can be added or deleted, its important that the same quantity of actions are defined in the line 21 in **train_node.py**, it willl need to be the same.
-- once all the parameters are defined it needs to run
-  
-```bash
-export TURTLEBOT3_MODEL=burger
-ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
-```
 in one terminal and in the workspace
 ```bash
-colcon build
-source install/setup.bash
-ros2 run dqn_robot_nav train_node
+ros2 run decision_node decision_node
 ```
-and the training will be saved
+and the interface between the misions and the esp32 will be complete
 
 For testing:
-All the workspace is ready to be compiled, it only needs:
 ```bash
-export TURTLEBOT3_MODEL=burger
-ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+ros2 topic list
 ```
-in one terminal and in the workspace
+to see the nodes.
+
+For the last step is needed to running docker for wifi (for this is neccesary to be in the same network)
 ```bash
-colcon build
-source install/setup.bash
-ros2 run dqn_robot_nav test_node
+docker run -it --rm --net=host microros/micro-ros-agent:humble udp4 --port 8888 -v6
 ```
 
 
-## Exercise 2
-for this exercise it is neccesary the following archives of rosbag:
-**https://drive.google.com/drive/folders/18W1yZCbDVFbHhpRyzelfaHJ892iqRWMr?usp=drive_link**
+## Interface
+The following link is to access to interact with all:
+**https://lauch01.github.io/robotic_web/**
 
-To run and visualize the entire TurtleBot3 visual control system, follow these steps in separate terminal windows:
+To use the interface, the following steps:
 
-1. **Launch the empty Gazebo environment with TurtleBot3**:
-   ```bash
-   ros2 launch turtlebot3_gazebo empty_world.launch.py
-   ```
-
-2. **Play the Kinect camera recording** (contains the RGB image used by the gesture detector):
-   ```bash
-   ros2 bag play kinect_data2
-   ```
-
-3. **Run the gesture perception node** (detects human pose and publishes commands to `/gesture_command`):
-   ```bash
-   ros2 run gesture_perception gesture_detector
-   ```
-
-4. **Start the micro-ROS agent to communicate with the ESP32** (ensure the ESP32 is connected via USB):
-   ```bash
-   docker run -it --rm --privileged -v /dev:/dev --network=host microros/micro-ros-agent:humble serial --dev /dev/ttyUSB0 -b 115200
-   ```
-
-5. **Monitor the velocity commands received by the robot**:
-   ```bash
-   ros2 topic echo /cmd_vel
-   ```
-
-## Exercise 3
-
-To run and visualize the entire TurtleBot3 visual control system with depth-based safety, follow these steps in separate terminal windows:
-
-1. **Launch the empty Gazebo environment with TurtleBot3**:
-   ```bash
-   ros2 launch turtlebot3_gazebo empty_world.launch.py
-   ```
-
-2. **Play the Kinect camera recording** (provides RGB and depth images for gesture and obstacle detection):
-   ```bash
-   ros2 bag play kinect_data2
-   ```
-
-3. **Run the gesture perception node** (detects human pose, classifies gestures, and computes distance zones):
-   ```bash
-   ros2 run gesture_perception gesture_detector
-   ```
-
-4. **Start the micro-ROS agent to communicate with the ESP32** (ensure the ESP32 is connected via USB):
-   ```bash
-   docker run -it --rm --privileged -v /dev:/dev --network=host microros/micro-ros-agent:humble serial --dev /dev/ttyUSB0 -b 115200
-   ```
-
-5. **Monitor the velocity commands received by the robot** (to see how safety logic modulates speed):
-   ```bash
-   ros2 topic echo /cmd_vel
-   ```
+1. **Select the room (A, B, C, D)**
+2. **Set an hour**
