@@ -99,3 +99,8 @@ To use the interface, the following steps:
 
 1. **Select the room (A, B, C, D)**
 2. **Set an hour**
+
+
+## Extras
+
+In the folders **screenshots**, **3d_models** and **circuit-design** are all the files to build the robot, between .stl, .json and references of components and parts.
