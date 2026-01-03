@@ -104,3 +104,4 @@ To use the interface, the following steps:
 ## Extras
 
 In the folders **screenshots**, **3d_models** and **circuit-design** are all the files to build the robot, between .stl, .json and references of components and parts.
+- .json files are to import in easyeda pro to view the 3d model
